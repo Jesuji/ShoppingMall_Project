@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 완료</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <style>
+        /* 강조 표시 */
+        .confirmation-container h2 {
+            color: #2ecc71;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .order-id-section, .payment-info-section, .shipping-info-section, .order-summary-section {
+            margin-bottom: 20px;
+        }
+
+        .order-summary-section table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .order-summary-section th, .order-summary-section td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .order-summary-section th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        /* 최종 결제 금액 강조 */
+        #final-price {
+            color: #e74c3c;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        /* 버튼 스타일 */
+        .confirmation-buttons .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .confirmation-buttons .button:hover {
+            background-color: #007bff;
+        }
+
+        .fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body id="confirmation-page">
+
+<header>
+    <h1 class="page-title">주문 완료</h1>
+</header>
+
+<div class="confirmation-container">
+    <h2>주문이 성공적으로 접수되었습니다!</h2>
+
+    <section class="order-id-section">
+        <h3>주문 번호</h3>
+        <p th:text="${orderId}">123456789</p>
+    </section>
+
+    <!-- 결제 정보 -->
+    <section class="payment-info-section">
+        <h3>결제 정보</h3>
+        <p>결제 수단: <span th:text="${paymentMethod}">신용카드</span></p>
+        <p>결제 상태: <span th:text="${paymentStatus}">결제 완료</span></p>
+
+        <!-- 계좌이체 선택 시 계좌 정보 표시 -->
+        <div th:if="${paymentMethod == '무통장 입금'}">
+            <p>입금 계좌: <span th:text="${bankInfo}">농협은행 123-4567-890123</span></p>
+        </div>
+    </section>
+
+    <!-- 배송 정보 -->
+    <section class="shipping-info-section">
+        <h3>배송 정보</h3>
+        <p>수령인: <span th:text="${recipientName}">홍길동</span></p>
+        <p>연락처: <span th:text="${phoneNumber}">010-1234-5678</span></p>
+        <p>주소:
+            <span th:text="${addressLine1}">서울특별시 강남구 테헤란로 123</span>
+            <span th:text="${addressLine2}">101호</span>
+        </p>
+    </section>
+
+    <!-- 주문 상품 요약 -->
+    <section class="order-summary-section">
+        <h3>주문 상품 요약</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>상품 이름</th>
+                <th>수량</th>
+                <th>가격</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${orderItems}">
+                <td th:text="${item.productName}">상품 이름</td>
+                <td th:text="${item.quantity}">1</td>
+                <td class="item-price" th:text="${item.price}">10000</td>
+            </tr>
+            </tbody>
+        </table>
+        <p>총 상품 금액: <span id="total-price" th:text="${totalAmount}"></span></p>
+        <p>최종 결제 금액: <span id="final-price" th:text="${finalAmount}"></span></p>
+    </section>
+
+    <!-- 버튼 -->
+    <div class="confirmation-buttons">
+        <a href="/main" class="button">메인 페이지로 이동</a>
+    </div>
+</div>
+<!-- 폭죽 효과 -->
+<canvas class="fireworks"></canvas>
+
+<script>
+
+    window.onload = function () {
+        function formatNumberWithComma(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        // 각 항목 가격 포맷팅
+        document.querySelectorAll('.item-price').forEach(priceElement => {
+            const price = parseFloat(priceElement.textContent.trim()); // 텍스트에서 숫자 추출
+            priceElement.textContent = formatNumberWithComma(price) + '원'; // 쉼표 추가
+        });
+
+        // 총 금액 포맷팅
+        const totalPriceElement = document.getElementById('total-price');
+        if (totalPriceElement) {
+            const totalAmount = parseInt(totalPriceElement.textContent.trim().replace(/[^0-9]/g, ''));
+            totalPriceElement.textContent = formatNumberWithComma(totalAmount) + '원';
+        }
+
+        // 최종 금액 포맷팅
+        const finalPriceElement = document.getElementById('final-price');
+        if (finalPriceElement) {
+            const finalAmount = parseInt(finalPriceElement.textContent.trim().replace(/[^0-9]/g, ''));
+            finalPriceElement.textContent = formatNumberWithComma(finalAmount) + '원';
+        }
+
+        startFireworks(); // 폭죽 효과 시작
+    };
+
+    // 폭죽 효과
+    function startFireworks() {
+        const canvas = document.querySelector('.fireworks');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+
+        function createParticle(x, y) {
+            const count = Math.random() * 50 + 50;
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    radius: Math.random() * 5 + 2,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    angle: Math.random() * Math.PI * 2,
+                    speed: Math.random() * 5 + 2,
+                    alpha: 1,
+                    decay: Math.random() * 0.02 + 0.01,
+                });
+            }
+        }
+
+        function updateParticles() {
+            particles.forEach((particle, index) => {
+                particle.x += Math.cos(particle.angle) * particle.speed;
+                particle.y += Math.sin(particle.angle) * particle.speed;
+                particle.alpha -= particle.decay;
+                if (particle.alpha <= 0) particles.splice(index, 1);
+            });
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((particle) => {
+                ctx.globalAlpha = particle.alpha;
+                ctx.fillStyle = particle.color;
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+
+        function loop() {
+            updateParticles();
+            drawParticles();
+            requestAnimationFrame(loop);
+        }
+
+        canvas.addEventListener('click', (e) => createParticle(e.clientX, e.clientY));
+        createParticle(canvas.width / 2, canvas.height / 2); // 초기 폭죽
+        loop();
+    }
+</script>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <style>
+        .order-review-item a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .info-item a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body id="my-page">
+
+<div class="container">
+    <h1 class="page-title">마이페이지</h1>
+
+    <!-- 쿠폰 및 적립금 영역 -->
+    <div class="info-section">
+        <div class="info-item">
+            <a href="/my-page/coupons">
+            <h3>쿠폰</h3>
+            <p class="info-count" th:text="${couponCount}">0</p>
+            </a>
+        </div>
+        <div class="info-item">
+            <h3>적립금</h3>
+            <p class="info-count" th:text="${points}">0원</p>
+        </div>
+    </div>
+
+    <!-- 주문 내역 및 나의 리뷰 -->
+    <div class="order-review-section">
+        <div class="order-review-item">
+            <a href="/my-page/orders/history">
+            <h3>주문 내역</h3>
+            <p class="info-count" th:text="${orderCount}">0건</p>
+            </a>
+        </div>
+        <div class="order-review-item">
+            <a href="my-page/reviews">
+            <h3>나의 리뷰</h3>
+            <p class="info-count" th:text="${reviewCount}">0개</p>
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

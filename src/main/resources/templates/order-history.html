@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지 - 주문 내역</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body id="mypage-order-history">
+
+<header>
+    <h2 class="page-title">주문 내역</h2>
+    <a href="/main" class="back-button">← 메인 페이지로 돌아가기</a>
+</header>
+
+<div class="order-history-container">
+    <h2>주문 내역</h2>
+
+    <!-- 주문별 컨테이너 -->
+    <div th:each="order : ${orders}" class="order-container">
+        <h3>주문 번호: <span th:text="${order.id}">1</span></h3>
+        <p>주문 날짜: <span th:text="${order.orderDate}">2024-11-25</span></p>
+
+        <div class="order-section">
+            <h4>배송 정보</h4>
+            <p>수령인: <span th:text="${order.recipientName}">홍길동</span></p>
+            <p>연락처: <span th:text="${order.phoneNumber}">010-1234-5678</span></p>
+            <p>주소:
+                <span th:text="${order.addressLine1}">서울특별시 강남구 테헤란로 123</span>
+                <span th:text="${order.addressLine2}">101호</span>
+            </p>
+            <p>배송 요청사항: <span th:text="${order.deliveryRequest}">경비실에 맡겨주세요</span></p>
+        </div>
+
+        <div class="order-section">
+            <h4>결제 및 배송 상태</h4>
+            <div class="status-container">
+                <!-- 결제 상태 -->
+                <div class="payment-status">
+                    <h3>결제 상태</h3>
+                    <div class="status-arrow">
+                        <span th:text="${order.paymentStatus}"></span>
+                    </div>
+                </div>
+
+                <!-- 배송 상태 -->
+                <div class="shipping-status">
+                    <h3>배송 상태</h3>
+                    <div class="status-arrow">
+                        <span th:text="${order.shippingStatus}"></span>
+                    </div>
+                </div>
+            </div>
+            <p class="total-amount">총 상품 금액:
+                <span th:text="${#numbers.formatInteger(order.totalAmount, 0, 'COMMA')} + '원'">50,000원</span>
+            </p>
+            <p class="final-amount">최종 결제 금액:
+                <span th:text="${#numbers.formatInteger(order.finalAmount, 0, 'COMMA')} + '원'">50,000원</span>
+            </p>
+        </div>
+
+        <div class="order-section">
+            <h4>주문 상품 정보</h4>
+            <table>
+                <thead>
+                <tr>
+                    <th>상품 이미지</th>
+                    <th>상품 이름</th>
+                    <th>수량</th>
+                    <th>가격</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${order.items}">
+                    <td>
+                        <img th:src="@{/images/products/{imagePath}(imagePath=${item.imagePath})}"
+                             alt="상품 이미지" class="product-image"
+                             style="width: 100px; height: 100px; object-fit: cover;"/>
+                    </td>
+                    <td th:text="${item.productName}">상품명</td>
+                    <td th:text="${item.quantity}">2</td>
+                    <td th:text="${#numbers.formatInteger(item.price * item.quantity, 0, 'COMMA')} + '원'">상품 가격</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa;
+    }
+
+    .page-title {
+        text-align: center;
+        margin: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .order-history-container {
+        width: 80%;
+        margin: 20px auto;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    .order-container {
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+        margin-bottom: 20px;
+    }
+
+    .order-container:last-child {
+        border-bottom: none;
+    }
+
+    h4 {
+        font-size: 18px;
+        margin-top: 20px;
+        color: #007bff;
+    }
+
+    .status-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 15px 0;
+    }
+
+    .payment-status, .shipping-status {
+        flex: 1;
+        margin-right: 10px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .payment-status h5, .shipping-status h5 {
+        margin-bottom: 10px;
+        font-size: 16px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .status-arrow {
+        font-size: 14px;
+        color: #555;
+    }
+
+    .payment-status span {
+        color: #28a745; /* 초록색 (결제 완료) */
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .shipping-status span {
+        color: #007bff; /* 파란색 (배송중) */
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f8f9fa;
+    }
+
+    .product-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    .back-button {
+        display: inline-block;
+        margin: 10px;
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    .back-button:hover {
+        text-decoration: underline;
+    }
+
+    .total-amount {
+        font-size: 1.2rem; /* 크기를 키움 */
+        color: #333; /* 짙은 색으로 설정 */
+        font-weight: bold; /* 강조 */
+        margin: 10px 0; /* 상하 여백 */
+    }
+
+    .final-amount {
+        font-size: 1.5rem; /* 더 크기를 키워 강조 */
+        color: #d9534f; /* 붉은색으로 설정 */
+        font-weight: bold; /* 강조 */
+        margin: 10px 0; /* 상하 여백 */
+        border-top: 2px solid #d9534f; /* 위에 선 추가 */
+        padding-top: 10px; /* 패딩 추가 */
+    }
+
+    .total-amount span,
+    .final-amount span {
+        font-size: 1.2rem; /* 금액 크기를 조정 */
+        color: inherit; /* 부모 색상 상속 */
+    }
+
+</style>
+</html>

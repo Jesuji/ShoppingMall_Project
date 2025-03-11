@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>나의 리뷰</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body id="review-page">
+
+<div class="review-container">
+    <!-- 리뷰 목록 -->
+    <div class="review-list">
+        <h2>내가 작성한 리뷰</h2>
+        <div class="review-item" th:each="review : ${myReviews}" th:attr="data-review-id=${review.id}">
+            <div class="review-info">
+                <!-- 상품 이미지 -->
+                <div class="review-product-image">
+                    <img th:if="${review.imagePath != null}"
+                         th:src="@{/images/products/{imagePath}(imagePath=${review.imagePath})}"
+                         alt="Product Image" class="product-image"/>
+                </div>
+                <!-- 상품 정보 -->
+                <div class="review-details">
+                    <p class="review-product" th:text="'상품명: ' + ${review.productName}">상품명</p>
+                    <p class="review-rating" th:text="'평점: ' + ${review.rating}">평점</p>
+                    <p class="review-content" th:text="${review.content}">리뷰 내용</p>
+                    <p class="review-date" th:text="${review.createdAt}">작성일</p>
+                </div>
+                <!-- 수정 및 삭제 버튼 -->
+                <div class="review-actions">
+                    <button class="edit-btn" data-review-id="${review.id}" onclick="editReview(this)">수정</button>
+                    <button class="delete-review-btn" th:attr="data-review-id=${review.id}"
+                            onclick="deleteReview(this)">삭제
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function editReview(button) {
+        const reviewItem = button.closest('.review-item');
+
+        if (!reviewItem) {
+            alert('리뷰 항목을 찾을 수 없습니다.');
+            return;
+        }
+
+        const contentElement = reviewItem.querySelector('.review-content');
+        const ratingElement = reviewItem.querySelector('.review-rating');
+
+        if (!contentElement || !ratingElement) {
+            alert('리뷰 데이터가 올바르지 않습니다.');
+            return;
+        }
+
+        // 기존 내용을 수정 폼으로 변경
+        const originalContent = contentElement.textContent.trim();
+        const originalRating = ratingElement.textContent.match(/\d+/)[0];
+
+        contentElement.innerHTML = `
+        <textarea class="edit-content">${originalContent}</textarea>
+    `;
+        ratingElement.innerHTML = `
+        <select class="edit-rating">
+            <option value="5" ${originalRating === '5' ? 'selected' : ''}>5</option>
+            <option value="4" ${originalRating === '4' ? 'selected' : ''}>4</option>
+            <option value="3" ${originalRating === '3' ? 'selected' : ''}>3</option>
+            <option value="2" ${originalRating === '2' ? 'selected' : ''}>2</option>
+            <option value="1" ${originalRating === '1' ? 'selected' : ''}>1</option>
+        </select>
+    `;
+
+        // 버튼 변경
+        const actions = reviewItem.querySelector('.review-actions');
+        actions.innerHTML = `
+        <button class="save-btn" onclick="saveReview(this, ${reviewItem.dataset.reviewId})">저장</button>
+        <button class="cancel-btn" onclick="cancelEdit(this, '${originalContent}', ${originalRating})">취소</button>
+    `;
+    }
+
+    function saveReview(button, reviewId) {
+        const reviewItem = button.closest('.review-item');
+
+        if (!reviewItem) {
+            alert('리뷰 항목을 찾을 수 없습니다.');
+            return;
+        }
+
+        const newContent = reviewItem.querySelector('.edit-content').value.trim();
+        const newRating = reviewItem.querySelector('.edit-rating').value;
+
+        if (!newContent || !newRating) {
+            alert('내용과 평점을 모두 입력해주세요.');
+            return;
+        }
+
+        fetch(`/update/review/${reviewId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                content: newContent,
+                rating: newRating,
+            }),
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    return response.text().then(text => {
+                        throw new Error(text);
+                    });
+                }
+            })
+            .then(message => {
+                alert(message);
+                location.reload(); // 수정 후 새로고침
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(`오류 발생: ${error.message}`);
+            });
+    }
+
+    function cancelEdit(button, originalContent, originalRating) {
+        const reviewItem = button.closest('.review-item');
+        reviewItem.querySelector('.review-content').textContent = originalContent;
+        reviewItem.querySelector('.review-rating').textContent = `평점: ${originalRating}/5`;
+
+        // 버튼 복구
+        const actions = reviewItem.querySelector('.review-actions');
+        actions.innerHTML = `
+        <button class="edit-btn" onclick="editReview(this)">수정</button>
+        <button class="delete-btn" onclick="deleteReview(this)">삭제</button>
+    `;
+    }
+
+    async function deleteReview(button) {
+        const reviewId = button.getAttribute('data-review-id');
+
+        if (!reviewId) {
+            alert("리뷰 ID를 찾을 수 없습니다.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/delete/review/${reviewId}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                alert("리뷰가 삭제되었습니다.");
+                button.closest(".review-item").remove(); // DOM에서 삭제
+            } else {
+                const errorMessage = await response.text();
+                alert("삭제 실패: " + errorMessage);
+            }
+        } catch (error) {
+            console.error("삭제 중 오류 발생:", error);
+            alert("삭제 요청 중 문제가 발생했습니다.");
+        }
+    }
+</script>
+</body>
+</html>

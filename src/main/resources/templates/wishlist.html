@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>위시리스트</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body id="wishlist-page">
+
+<header>
+    <a href="/main" class="back-button">← 뒤로가기</a>
+    <h1 class="page-title">위시리스트</h1>
+</header>
+
+<div class="wishlist-container">
+    <!-- 위시리스트 아이템 리스트 -->
+    <div class="wishlist-item-list">
+        <h2>위시리스트 목록</h2>
+
+        <div th:if="${#lists.isEmpty(wishlistItems)}">
+            <p class="empty-wishlist-message">위시 리스트가 비어 있습니다.</p>
+        </div>
+
+
+        <div class="wishlist-grid">
+            <!-- 위시리스트 항목 -->
+            <div class="wishlist-item" th:each="item : ${wishlistItems}" th:data-product-id="${item.productId}">
+                <div class="wishlist-item-info">
+                    <!-- 상품 이미지 -->
+                    <a th:href="@{/products/{id}(id=${item.productId})}">
+                        <img th:src="@{/images/products/{imagePath}(imagePath=${item.imagePath})}" alt="Product Image"
+                             class="wishlist-item-image"/>
+                    </a>
+                    <div class="item-details">
+                        <!-- 상품 이름 -->
+                        <a th:href="@{/products/{id}(id=${item.productId})}" class="item-name">
+                            <h3 class="item-name" th:text="${item.name}">상품 이름</h3>
+                        </a>
+                        <!-- 상품 가격 -->
+                        <p class="item-price" th:text="${#numbers.formatInteger(item.price, 0, 'COMMA')} + '원'">상품
+                            가격</p>
+                        <!-- 삭제 버튼 -->
+                        <button class="delete-btn" th:attr="data-product-id=${item.productId}">삭제</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const deleteButtons = document.querySelectorAll(".delete-btn");
+
+        deleteButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                const productId = button.getAttribute("data-product-id");
+
+                if (!productId) {
+                    alert("상품 ID를 찾을 수 없습니다.");
+                    return;
+                }
+
+                // Fetch API를 사용한 삭제 요청
+                fetch(`/delete/wishlist/${productId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert("위시 리스트에서 삭제되었습니다.");
+                            button.closest(".wishlist-item").remove(); // DOM에서 삭제
+                        } else {
+                            response.text().then(text => {
+                                alert(`오류 발생: ${text}`);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("서버와의 통신 중 오류가 발생했습니다.");
+                    });
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

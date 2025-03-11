@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body id="login-page">
+<div class="container">
+    <div class="login-container">
+        <h2 class="login-title">로그인</h2>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="이메일을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" required placeholder="비밀번호를 입력하세요">
+                    <span class="show-password" onclick="togglePassword()">표시</span>
+                </div>
+            </div>
+            <button type="button" class="login-button" onclick="login()">로그인</button>
+            <p id="error-message" style="color: red; display: none;">로그인에 실패했습니다. 다시 시도해주세요.</p>
+        </form>
+    </div>
+    <div class="signup-container">
+        <p>쇼핑몰이 처음이세요? <a href="/signup" class="signup-link">회원 가입</a></p>
+        <a href="/find-id" class="forgot-id-link">아이디 찾기</a>
+        <a href="/find-password" class="forgot-password-link">비밀번호 찾기</a>
+    </div>
+</div>
+<script>
+    function togglePassword() {
+        const passwordField = document.getElementById('password');
+        const passwordToggle = document.querySelector('.show-password');
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            passwordToggle.textContent = '숨기기';
+        } else {
+            passwordField.type = 'password';
+            passwordToggle.textContent = '표시';
+        }
+    }
+
+    async function login() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const errorMessage = document.getElementById('error-message');
+
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (response.ok) {
+                window.location.href = '/main';
+            } else {
+                errorMessage.style.display = 'block';
+            }
+        } catch (error) {
+            errorMessage.textContent = "오류가 발생했습니다. 다시 시도해주세요.";
+            errorMessage.style.display = 'block';
+        }
+    }
+</script>
+</body>
+</html>

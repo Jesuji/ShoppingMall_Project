@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>내 쿠폰</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <style>
+        #coupons-page {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            padding: 20px;
+        }
+
+        .coupon-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .coupon-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .coupon-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .coupon-card p {
+            margin: 5px 0;
+            color: #666;
+            text-decoration: none; /* 설명과 숫자 아래 언더라인 제거 */
+        }
+
+        .coupon-card .used {
+            color: red;
+            font-weight: bold;
+        }
+
+        .coupon-card .valid {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body id="coupons-page">
+
+<h2>내 쿠폰</h2>
+<div class="coupon-container">
+    <div class="coupon-card" th:each="coupon : ${coupons}">
+        <h3 th:text="${coupon.description}">쿠폰 설명</h3>
+        <p th:text="'할인 금액: ' + ${coupon.discountAmount} + '원'">할인 금액</p>
+        <p th:text="'유효 기간: ' + ${coupon.expirationDate}">유효 기간</p>
+        <p th:classappend="${coupon.used} ? 'used' : 'valid'"
+           th:text="${coupon.used} ? '사용됨' : '사용 가능'">사용 상태</p>
+    </div>
+</div>
+
+</body>
+</html>

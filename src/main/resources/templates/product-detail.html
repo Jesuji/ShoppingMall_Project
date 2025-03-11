@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 상세 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body id="product-detail-page">
+
+<!-- 뒤로 가기 링크 -->
+<a href="/main" class="back-button">← 뒤로가기</a>
+
+<div class="product-detail-container" th:attr="data-product-id=${product?.id ?: 'unknown'}">
+    <!-- 상품 이미지 -->
+    <div class="product-image-container">
+        <img th:src="@{/images/products/{imagePath}(imagePath=${product.imagePath})}" alt="Product Image"
+             class="product-detail-image"
+             style="width: auto; height: 100%; border-radius: 10px;"/></div>
+
+    <!-- 상품 정보 -->
+    <div class="product-info-container">
+        <h1 class="product-name" th:text="${product.name}">상품 이름</h1>
+        <p class="product-price" th:text="${#numbers.formatInteger(product.price, 0, 'COMMA')} + '원'">상품 가격</p>
+        <p class="product-description" th:text="${product.description}">상품 설명</p>
+
+        <div class="quantity-stock-container">
+            <!-- 수량 -->
+            <div class="quantity-container">
+                <label for="quantity">수량:</label>
+                <input type="number" id="quantity" name="quantity" min="1" max="30" value="1"/>
+            </div>
+
+            <!-- 재고 -->
+            <div class="stock-container">
+                <span>재고: </span>
+                <span id="product-stock" th:text="${product.stock} + '개'">30개</span>
+            </div>
+        </div>
+
+        <p class="total-price" id="total-price">총 주문 금액: 0원</p>
+
+        <!-- 위시리스트 추가 -->
+        <button class="wishlist-button" onclick="addToWishlist()">위시리스트에 담기</button>
+
+        <!-- 장바구니, 구매 버튼 -->
+        <div class="button-container">
+            <button class="cart-button" onclick="addToCart()">장바구니 담기</button>
+        </div>
+    </div>
+</div>
+
+<!-- 리뷰 섹션 -->
+<div class="review-section">
+
+    <div class="tabs">
+        <button class="tab-link active" onclick="openTab(event, 'description')">상품 설명</button>
+        <button class="tab-link" onclick="openTab(event, 'reviews')">상품 후기</button>
+        <button class="tab-link" onclick="openTab(event, 'inquiry')">상품 문의</button>
+    </div>
+
+    <div id="description" class="tab-content">
+        <h2>상품 설명</h2>
+        <p th:text="${product.description}">상품에 대한 자세한 설명이 여기에 표시됩니다.</p>
+    </div>
+
+    <div id="reviews" class="tab-content" style="display: none;">
+        <h2>상품 후기</h2>
+        <!-- 리뷰 작성 폼 -->
+        <form class="review-form" onsubmit="event.preventDefault(); addReview();">
+            <input type="hidden" name="productId" th:value="${product.id}"/>
+            <label for="rating">평점:</label>
+            <select id="rating" name="rating" required>
+                <option value="5">5점</option>
+                <option value="4">4점</option>
+                <option value="3">3점</option>
+                <option value="2">2점</option>
+                <option value="1">1점</option>
+            </select>
+            <label for="content">리뷰:</label>
+            <textarea id="content" name="content" rows="3" required></textarea>
+            <button type="submit" class="submit-review-btn">리뷰 작성</button>
+        </form>
+        <div class="review-list">
+            <!-- 리뷰 목록 -->
+            <div class="review-item" th:each="review : ${reviews}">
+                <div th:if="${review.comments.isEmpty()}">
+                    <p>댓글이 없습니다.</p>
+                    <div th:each="comment : ${review.comments}">
+                        <p th:text="${comment.content}">댓글 내용</p>
+                    </div>
+                </div>
+                <p class="review-author" th:text="'작성자: ' + ${review.memberName}">작성자</p>
+                <p class="review-rating" th:text="'평점: ' + ${review.rating} + '/5'">평점</p>
+                <p class="review-content" th:text="${review.content}">리뷰 내용</p>
+                <p class="review-date" th:text="${review.createdAt}">작성일</p>
+
+                <!-- 댓글 작성 폼 -->
+                <div class="comment-form" style="margin-top: 30px;">
+                    <textarea class="comment-input" th:attr="data-review-id=${review?.id ?: 0}"
+                              placeholder="댓글을 작성하세요"></textarea>
+                    <button th:attr="data-review-id=${review.id}"
+                            onclick="addComment(this.getAttribute('data-review-id'))">댓글 작성
+                    </button>
+                </div>
+
+                <!-- 댓글 섹션 -->
+                <div class="comment-section">
+                    <h3>댓글</h3>
+                    <div class="comment-list" th:each="comment : ${review.comments}">
+                        <!-- 부모 댓글 표시 -->
+                        <p class="comment-author" th:text="'작성자: ' + ${comment.memberName}">댓글 작성자</p>
+                        <p class="comment-content" th:text="${comment.content}">댓글 내용</p>
+                        <p class="comment-date" th:text="${comment.createdAt}">작성일</p>
+
+                        <!-- 수정 및 삭제 버튼 -->
+                        <button class="edit-comment-btn" th:attr="data-comment-id=${comment.id}"
+                                onclick="showEditCommentForm(this)">수정
+                        </button>
+                        <button class="delete-comment-btn" th:attr="data-comment-id=${comment.id}"
+                                onclick="deleteComment(this)">삭제
+                        </button>
+
+                        <!-- 댓글 수정 폼 (기본적으로 숨김 처리) -->
+                        <div class="edit-comment-form" th:attr="id='edit-form-' + ${comment.id}" style="display: none;">
+                            <textarea class="edit-comment-input" placeholder="댓글 수정 내용을 입력하세요"></textarea>
+                            <button class="save-edit-btn" th:attr="data-comment-id=${comment.id}"
+                                    onclick="editComment(this)">저장
+                            </button>
+                        </div>
+
+                        <!-- 답글 달기 버튼 -->
+                        <button class="toggle-reply-btn"
+                                th:attr="data-comment-id=${comment.id}"
+                                onclick="toggleReplyForm(this)">
+                            답글 달기
+                        </button>
+
+                        <!--대댓글 작성 폼 (기본적으로 숨김 처리) -->
+                        <div class="reply-form" th:attr="id='reply-form-' + ${comment.id}" style="display: none;">
+                            <textarea class="reply-input" placeholder="대댓글을 입력하세요"></textarea>
+                            <button class="reply-submit-btn"
+                                    th:attr="data-review-id=${review.id}, data-comment-id=${comment.id}"
+                                    onclick="addReply(this)">
+                                대댓글 작성
+                            </button>
+                        </div>
+
+                        <!-- 대댓글 목록 -->
+                        <div th:each="reply : ${comment.childComments}" th:if="${reply != null}">
+                            <p class="reply-author" th:text="'작성자: ' + (${reply.memberName ?: '알 수 없음'})"></p>
+                            <p class="reply-content" th:text="${reply.content ?: '내용 없음'}"></p>
+
+                            <!-- 수정 및 삭제 버튼 -->
+                            <button class="edit-reply-btn" th:attr="data-comment-id=${reply.id}"
+                                    onclick="showEditCommentForm(this)">수정
+                            </button>
+                            <button class="delete-reply-btn" th:attr="data-comment-id=${reply.id}"
+                                    onclick="deleteComment(this)">삭제
+                            </button>
+
+                            <!-- 대댓글 수정 폼 (기본적으로 숨김 처리) -->
+                            <div class="edit-reply-form" th:attr="id='edit-form-' + ${reply.id}" style="display: none;">
+                                <textarea class="edit-reply-input" placeholder="대댓글 수정 내용을 입력하세요"></textarea>
+                                <button class="save-edit-reply-btn" th:attr="data-comment-id=${reply.id}"
+                                        onclick="editComment(this)">저장
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="inquiry" class="tab-content" style="display: none;">
+    <h2>상품 문의</h2>
+    <p>상품에 대한 문의 내용을 확인할 수 있는 섹션입니다.</p>
+</div>
+
+<script>
+    async function addToWishlist() {
+        let url = window.location.href;
+        url = url.split("#")[0]; // 해시 제거
+        const productId = url.substring(url.lastIndexOf('/') + 1); // URL에서 productId 가져오기
+
+        try {
+            const response = await fetch('/add/wishlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({productId})
+            });
+
+            if (response.ok) {
+                const message = await response.text();
+                alert(message); // 성공 메시지 표시
+            } else if (response.status === 401) {
+                alert("로그인이 필요합니다.");
+                window.location.href = "/login"; // 로그인 페이지로 리다이렉트
+            } else if (response.status === 400) {
+                const errorMessage = await response.text();
+                alert(errorMessage); // 실패 메시지 표시
+            } else {
+                const errorMessage = await response.text();
+                alert(`오류 발생: ${errorMessage}`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("서버와의 통신 중 오류가 발생했습니다.");
+        }
+    }
+
+    <!-- 백엔드 API에 상품 정보 전달 -->
+    async function addToCart() {
+        const quantityInput = document.getElementById("quantity");
+        if (!quantityInput) {
+            console.error("Quantity input not found.");
+            return;
+        }
+
+        const quantity = quantityInput.value;
+
+        // URL에서 productId를 가져오기
+        let url = window.location.href;
+        url = url.split("#")[0]; // 해시 제거
+        const productId = url.substring(url.lastIndexOf('/') + 1);
+
+        try {
+            const response = await fetch('/add/cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({productId, quantity})
+            });
+
+            if (response.ok) {
+                const message = await response.text();
+                alert(message);
+            } else if (response.status === 401) {
+                alert("로그인이 필요합니다.");
+                window.location.href = "/login";
+            } else {
+                const errorMessage = await response.text();
+                alert(errorMessage); // 실패 메시지 표시
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("서버와의 통신 중 오류가 발생했습니다.");
+        }
+    }
+
+    function updateTotalPrice() {
+        // 수량 가져오기
+        const quantityInput = document.getElementById('quantity');
+        const quantity = parseInt(quantityInput.value);
+
+        // 상품 가격 가져오기
+        const priceElement = document.querySelector('.product-price');
+        if (!priceElement) {
+            console.error("상품 가격 요소를 찾을 수 없습니다.");
+            return;
+        }
+
+        // 가격 문자열에서 숫자만 추출
+        const priceText = priceElement.textContent.replace(/[^\d]/g, ''); // 숫자 외 제거
+        const price = parseInt(priceText);
+
+        if (isNaN(price) || isNaN(quantity)) {
+            console.error("가격 또는 수량 값이 올바르지 않습니다.");
+            return;
+        }
+
+        // 총 주문 금액 계산
+        const totalPrice = price * quantity;
+
+        // 총 주문 금액 업데이트
+        const totalPriceElement = document.getElementById('total-price');
+        if (totalPriceElement) {
+            totalPriceElement.innerText = `총 주문 금액: ${totalPrice.toLocaleString()}원`;
+        } else {
+            console.error("총 주문 금액 요소를 찾을 수 없습니다.");
+        }
+    }
+
+    window.onload = function () {
+        // URL에 해시 값이 있는 경우 해당 탭 활성화
+        const hash = window.location.hash;
+        if (hash === "#reviews") {
+            openTab(null, "reviews");
+        } else {
+            // 기본적으로 상품 설명 탭 활성화
+            openTab(null, "description");
+        }
+
+        // 수량 입력 필드 이벤트 리스너 추가
+        const quantityInput = document.getElementById('quantity');
+        if (quantityInput) {
+            quantityInput.addEventListener('change', updateTotalPrice);
+            updateTotalPrice(); // 페이지가 로드되었을 때 초기 총 주문 금액 계산
+        } else {
+            console.error("수량 입력 필드를 찾을 수 없습니다.");
+        }
+    };
+
+    function openTab(event, tabId) {
+        // 모든 탭 콘텐츠 숨기기
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach(content => content.style.display = 'none');
+
+        // 모든 탭 링크 비활성화
+        const tabLinks = document.querySelectorAll('.tab-link');
+        tabLinks.forEach(link => link.classList.remove('active'));
+
+        // 선택한 탭 콘텐츠 보이기
+        const selectedTab = document.getElementById(tabId);
+        if (selectedTab) {
+            selectedTab.style.display = 'block';
+        } else {
+            console.error(`Tab with ID "${tabId}" not found.`);
+        }
+        // 선택한 탭 링크 활성화 (event가 null이 아닐 때만)
+        if (event && event.currentTarget) {
+            event.currentTarget.classList.add('active');
+        }
+    }
+
+    // 기본 활성화된 탭 설정
+    document.getElementById('description').style.display = 'block';
+
+    async function addReview() {
+        // 리뷰 작성 폼의 데이터를 가져오기
+        const productId = document.querySelector('input[name="productId"]').value;
+        const rating = document.getElementById('rating').value;
+        const content = document.getElementById('content').value;
+
+        try {
+            const response = await fetch('/add/review', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productId,
+                    rating,
+                    content
+                })
+            });
+
+            if (response.ok) {
+                alert("리뷰가 작성되었습니다.");
+                window.location.hash = "reviews";
+                location.reload(); // 성공 시 페이지 새로고침으로 리뷰 갱신
+            } else if (response.status === 401) {
+                alert("로그인이 필요합니다.");
+                window.location.href = "/login"; // 로그인 페이지로 리다이렉트
+            } else {
+                const errorMessage = await response.text();
+                alert(`리뷰 등록 중 오류 발생: ${errorMessage}`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("서버와의 통신 중 오류가 발생했습니다.");
+        }
+    }
+
+    function toggleReplyForm(button) {
+        const commentId = button.getAttribute("data-comment-id"); //부모 댓글 id 가져오기
+        const replyForm = document.getElementById(`reply-form-${commentId}`);
+
+        // 대댓글 작성 폼의 표시 상태를 토글
+        replyForm.style.display = replyForm.style.display === "none" ? "block" : "none";
+    }
+
+    //대댓글 작성
+    async function addReply(button) {
+        const reviewId = button.getAttribute("data-review-id"); // 동적으로 설정된 reviewId
+        const parentCommentId = button.getAttribute("data-comment-id"); // 동적으로 설정된 parentCommentId
+        const replyContent = button.closest(".reply-form").querySelector(".reply-input").value.trim();
+
+        if (!replyContent) {
+            alert("대댓글 내용을 입력해주세요.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/add/reply/${reviewId}/${parentCommentId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({content: replyContent}),
+            });
+
+            if (response.ok) {
+                alert("대댓글이 작성되었습니다.");
+                window.location.hash = "reviews";
+                location.reload(); // 성공 후 새로고침
+            } else {
+                const errorMessage = await response.text();
+                alert(`대댓글 작성 실패: ${errorMessage}`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("대댓글 작성 중 오류가 발생했습니다.");
+        }
+    }
+
+    async function addComment(reviewId) {
+        const commentInput = document.querySelector(`.comment-input[data-review-id="${reviewId}"]`);
+        const commentContent = commentInput ? commentInput.value.trim() : "";
+
+        if (!commentContent) {
+            alert("댓글 내용을 입력해주세요.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/add/comments/${reviewId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({content: commentContent}),
+            });
+
+            console.log('reviewId: &{reviewId');
+
+            if (response.ok) {
+                alert("댓글이 작성되었습니다.");
+                window.location.hash = "reviews";
+                location.reload(); // 성공 후 페이지 새로고침
+            } else {
+                const errorMessage = await response.text();
+                alert(`댓글 작성 실패: ${errorMessage}`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("댓글 작성 중 오류가 발생했습니다.");
+        }
+    }
+
+    // 댓글 수정 폼 표시
+    function showEditCommentForm(button) {
+        const commentId = button.getAttribute("data-comment-id");
+        const editForm = document.getElementById(`edit-form-${commentId}`);
+        editForm.style.display = editForm.style.display === "none" ? "block" : "none";
+    }
+
+    // 댓글 수정
+    async function editComment(button) {
+        const commentId = button.getAttribute("data-comment-id"); // 수정할 댓글 ID 가져오기
+        const editTextarea = document.querySelector(`#edit-form-${commentId} .edit-reply-input`); // 텍스트 영역 선택
+        const newContent = editTextarea ? editTextarea.value.trim() : null; // 입력된 새로운 내용
+
+        if (!newContent) {
+            alert("수정할 내용을 입력하세요.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/products/update/comments/${commentId}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({content: newContent}),
+            });
+
+            if (response.ok) {
+                alert("댓글이 수정되었습니다.");
+                location.reload();
+            } else {
+                const errorMessage = await response.text();
+                alert(`수정 실패: ${errorMessage}`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("댓글 수정 중 오류가 발생했습니다.");
+        }
+    }
+
+    // 댓글 삭제
+    async function deleteComment(button) {
+        const commentId = button.getAttribute("data-comment-id");
+
+        if (!confirm("정말로 댓글을 삭제하시겠습니까?")) return;
+
+        try {
+            const response = await fetch(`/products/delete/comments/${commentId}`, {
+                method: "DELETE",
+            });
+
+            if (response.ok) {
+                alert("댓글이 삭제되었습니다.");
+                // DOM에서 삭제된 댓글 요소 제거
+                const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`).closest('.reply-item');
+                if (commentElement) {
+                    commentElement.remove(); // 화면에서 해당 댓글 삭제
+                }
+            } else {
+                const errorMessage = await response.text();
+                alert(`삭제 실패: ${errorMessage}`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("댓글 삭제 중 오류가 발생했습니다.");
+        }
+    }
+
+</script>
+
+</body>
+</html>

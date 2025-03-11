@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>약관 동의</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body id="terms-page">
+<div class="container">
+  <div class="terms-container">
+    <h2>약관 동의</h2>
+    <p>회원가입을 위해 약관에 동의해 주세요.</p>
+    <form action="/signup" method="get" onsubmit="return validateAgreement()">
+      <div class="form-group">
+        <input type="checkbox" id="terms-service" class="terms-checkbox" required>
+        <label for="terms-service">서비스 이용 약관에 동의합니다.</label>
+        <p class="terms-text">[서비스 이용 약관 내용이 여기에 들어갑니다.]</p>
+      </div>
+
+      <div class="form-group">
+        <input type="checkbox" id="terms-privacy" class="terms-checkbox" required>
+        <label for="terms-privacy">개인정보 수집 및 이용에 동의합니다.</label>
+        <p class="terms-text">[개인정보 수집 및 이용에 대한 설명이 여기에 들어갑니다.]</p>
+      </div>
+
+      <button type="submit" class="agree-button" disabled id="agree-button">동의하고 다음</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  // 모든 체크박스가 체크될 때만 버튼 활성화
+  const checkboxes = document.querySelectorAll('.terms-checkbox');
+  const agreeButton = document.getElementById('agree-button');
+
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+      agreeButton.disabled = !allChecked;
+    });
+  });
+
+  function validateAgreement() {
+    return Array.from(checkboxes).every(cb => cb.checked);
+  }
+</script>
+</body>
+</html>

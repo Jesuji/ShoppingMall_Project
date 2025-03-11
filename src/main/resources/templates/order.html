@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body id="order-page">
+
+<header>
+    <a href="/cart" class="back-button">← 장바구니로 돌아가기</a>
+    <h1 class="page-title">주문하기</h1>
+</header>
+
+<div class="order-container">
+
+    <!-- 배송지 정보 입력 -->
+    <section class="delivery-section">
+        <h2>배송지 정보</h2>
+        <form id="delivery-form" onsubmit="return validateForm()">
+            <label for="recipientName">수령인:</label>
+            <input type="text" id="recipientName" name="recipientName" placeholder="수령인 이름" required/>
+
+            <label for="phoneNumber">연락처:</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" placeholder="연락처" required/>
+
+            <label for="postalCode">우편번호:</label>
+            <input type="text" id="postalCode" name="postalCode" placeholder="우편번호" required/>
+
+            <label for="addressLine1">기본 주소:</label>
+            <input type="text" id="addressLine1" name="addressLine1" placeholder="기본 주소" required/>
+
+            <label for="addressLine2">상세 주소:</label>
+            <input type="text" id="addressLine2" name="addressLine2" placeholder="상세 주소"/>
+
+            <label for="isDefault">기본 배송지 설정:</label>
+            <input type="checkbox" id="isDefault" name="isDefault"/>
+
+            <label for="deliveryRequest">배송 요청 사항:</label>
+            <select id="deliveryRequest" name="deliveryRequest" onchange="toggleCustomRequest(this.value)">
+                <option value="">배송 요청 사항을 선택하세요</option>
+                <option value="부재시 경비실에 맡겨주세요.">부재시 경비실에 맡겨주세요.</option>
+                <option value="집으로 직접 배송해주세요.">집으로 직접 배송해주세요.</option>
+                <option value="택배함에 놔주세요.">택배함에 놔주세요.</option>
+                <option value="custom">직접 입력</option>
+            </select>
+            <!-- 사용자 정의 요청사항 입력 -->
+            <input
+                    type="text"
+                    id="customDeliveryRequest"
+                    name="customDeliveryRequest"
+                    placeholder="요청사항을 입력하세요"
+                    style="display: none; margin-top: 10px;"
+            /></form>
+    </section>
+
+    <section class="order-summary">
+        <h2>주문 요약</h2>
+        <!-- 선택한 상품 목록 -->
+        <div class="selected-items-list">
+            <h3>선택한 상품</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>상품 이름</th>
+                    <th>수량</th>
+                    <th>가격</th>
+                </tr>
+                </thead>
+                <tbody id="selected-items-tbody">
+                </tbody>
+            </table>
+        </div>
+        <table class="summary-table">
+            <tr>
+                <td>총 상품 금액</td>
+                <td id="totalAmount"></td>
+            </tr>
+            <tr>
+                <td>할인 쿠폰</td>
+                <td id="couponDiscount" style="color: red;">- 0원</td>
+            </tr>
+            <tr>
+                <td>적립금 사용</td>
+                <td id="pointsUsed" style="color: red;">- 0원</td>
+            </tr>
+            <tr class="final-price-row">
+                <td>총 결제 금액</td>
+                <td id="finalAmount" style="font-weight: bold;"></td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- 쿠폰 및 적립금 -->
+    <section class="discount-container">
+        <h2>쿠폰 선택</h2>
+        <label for="coupon">쿠폰 선택:</label>
+        <select id="coupon" name="coupon" onchange="updateFinalPrice()">
+            <option value="" selected>쿠폰을 선택하세요</option>
+            <option th:each="coupon : ${coupons}"
+                    th:value="${coupon.id}"
+                    th:data-discount="${coupon.couponDiscount}"
+                    th:text="|${coupon.description} - ${#numbers.formatInteger(coupon.couponDiscount, 0, 'COMMA')}원 할인|">
+            </option>
+        </select>
+    </section>
+
+    <!-- 적립금 입력 섹션 -->
+    <section class="discount-container">
+        <h2>적립금 사용</h2>
+        <label for="points">적립금 사용:</label>
+        <input type="number" id="points" name="points" placeholder="사용할 적립금 입력" min="0" th:attr="max=${points}" onchange="updateFinalPrice()" />
+        <p>보유 적립금: <span class="highlight" th:text="${#numbers.formatInteger(points, 0, 'COMMA')} + '원'">0원</span></p>
+    </section>
+
+    <!-- 결제 수단 -->
+    <section class="payment-method">
+        <h2>결제 수단</h2>
+        <label>
+            <input type="radio" name="paymentMethod" value="신용카드" checked/>
+            신용카드
+        </label>
+        <div id="card-options" style="display: block;">
+            <label for="registeredCard">등록된 카드:</label>
+            <select id="registeredCard" name="registeredCard">
+                <option value="카드1">신한카드 **** 1234</option>
+                <option value="카드2">국민카드 **** 5678</option>
+                <option value="카드3">우리카드 **** 9876</option>
+            </select>
+        </div>
+        <label>
+            <input type="radio" name="paymentMethod" value="계좌이체" onchange="togglePaymentOptions('bank')"/>
+            무통장 입금
+        </label>
+        <div id="bank-info" style="margin-left: 30px; display: none;">
+            <p>입금 계좌: 농협은행 123-4567-890123</p>
+            <p>예금주: 홍길동</p>
+        </div>
+    </section>
+
+    <!-- 주문하기 버튼 -->
+    <div class="order-button-container">
+        <button class="order-submit-button" onclick="submitOrder()">주문하기</button>
+    </div>
+</div>
+
+<script>
+    function updateFinalPrice() {
+        const totalPriceElement = document.getElementById('totalAmount');
+        const finalPriceElement = document.getElementById('finalAmount');
+        const couponSelect = document.getElementById('coupon');
+        const couponDiscountElement = document.getElementById('couponDiscount');
+        const pointsUsedElement = document.getElementById('pointsUsed');
+
+        const pointsInput = document.getElementById('points');
+
+        // 총 상품 금액 가져오기
+        const totalPrice = parseInt(totalPriceElement.textContent.replace(/[^0-9]/g, ''), 10);
+
+        // 선택된 쿠폰 할인 금액
+        const selectedCoupon = couponSelect.options[couponSelect.selectedIndex];
+        const couponDiscount = parseInt(selectedCoupon.getAttribute('data-discount'), 10) || 0;
+
+        // 입력한 적립금
+        const pointsUsed = parseInt(pointsInput.value, 10) || 0;
+
+        // 적립금 사용 가능 여부 확인
+        const maxPoints = parseInt(pointsInput.getAttribute('max'), 10);
+        if (pointsUsed > maxPoints) {
+            alert('사용 가능한 적립금을 초과했습니다.');
+            pointsInput.value = maxPoints; // 최대값으로 설정
+            return;
+        }
+
+        // 최종 결제 금액 계산
+        let finalPrice = totalPrice - couponDiscount - pointsUsed;
+        if (finalPrice < 0) finalPrice = 0; // 최소 금액 0원
+
+        // 최종 금액 업데이트
+        couponDiscountElement.textContent = `- ${couponDiscount.toLocaleString()}원`;
+        pointsUsedElement.textContent = `- ${pointsUsed.toLocaleString()}원`;
+        finalPriceElement.textContent = `${finalPrice.toLocaleString()}원`;
+    }
+
+    function validateForm() {
+        // 입력 필드 가져오기
+        const recipientName = document.getElementById('recipientName').value.trim();
+        const phoneNumber = document.getElementById('phoneNumber').value.trim();
+        const postalCode = document.getElementById('postalCode').value.trim();
+        const addressLine1 = document.getElementById('addressLine1').value.trim();
+
+        // 검증 조건 확인
+        if (!recipientName) {
+            alert('수령인 이름을 입력해주세요.');
+            document.getElementById('recipientName').focus(); // 해당 필드로 포커스 이동
+            return false;
+        }
+        if (!phoneNumber) {
+            alert('연락처를 입력해주세요.');
+            document.getElementById('phoneNumber').focus();
+            return false;
+        }
+        if (!postalCode) {
+            alert('우편번호를 입력해주세요.');
+            document.getElementById('postalCode').focus();
+            return false;
+        }
+        if (!addressLine1) {
+            alert('기본 주소를 입력해주세요.');
+            document.getElementById('addressLine1').focus();
+            return false;
+        }
+
+        return true; // 모든 조건이 만족되면 true 반환
+    }
+
+    // 폼 제출 이벤트에 연결
+    document.getElementById('delivery-form').onsubmit = function () {
+        return validateForm();
+    };
+
+    async function submitOrder() {
+        const selectedItems = JSON.parse(localStorage.getItem("selectedItems")); // localStorage에서 가져오기
+        const deliveryForm = document.getElementById('delivery-form');
+        const recipientName = deliveryForm.querySelector('#recipientName').value;
+        const phoneNumber = deliveryForm.querySelector('#phoneNumber').value;
+        const postalCode = deliveryForm.querySelector('#postalCode').value;
+        const addressLine1 = deliveryForm.querySelector('#addressLine1').value;
+        const addressLine2 = deliveryForm.querySelector('#addressLine2').value;
+
+        const couponSelect = document.getElementById('coupon');
+        const couponId = couponSelect.value || null;
+
+        const points = parseInt(document.getElementById('points').value, 10) || 0;
+        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+        const isDefault = deliveryForm.querySelector('#isDefault').checked; // 기본 배송지 여부
+        const deliveryRequestSelect = document.getElementById('deliveryRequest');
+        const deliveryRequestValue =
+            deliveryRequestSelect.value === 'custom'
+                ? document.getElementById('customDeliveryRequest').value
+                : deliveryRequestSelect.value;
+
+        // 최종 결제 금액 가져오기
+        const finalPriceElement = document.getElementById('finalAmount');
+        const finalAmount = parseInt(finalPriceElement.textContent.replace(/[^0-9]/g, ''), 10);
+        const totalPriceElement = document.getElementById('totalAmount');
+        const totalAmount = parseInt(totalPriceElement.textContent.replace(/[^0-9]/g, ''), 10);
+
+        try {
+            const response = await fetch('/order/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    recipientName,
+                    phoneNumber,
+                    postalCode,
+                    addressLine1,
+                    addressLine2,
+                    couponId,
+                    points,
+                    paymentMethod,
+                    selectedItems,
+                    isDefault,
+                    deliveryRequest: deliveryRequestValue,
+                    totalAmount,
+                    finalAmount
+                }),
+            });
+
+            if (response.status === 401) {
+                alert("주문 실패: 로그인을 해주세요");
+                window.location.href = "/login"; // 로그인 페이지로 이동
+                return;
+            }
+
+            if (response.ok) {
+                const orderId = await response.json();
+                alert('주문이 성공적으로 접수되었습니다!');
+                // 주문 페이지에서 전달되는 URL 예제
+                window.location.href = `/order/confirmation?orderId=${orderId}`;
+            } else {
+                const errorMessage = await response.text();
+                alert(`주문 실패: ${errorMessage}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('서버와의 통신 중 오류가 발생했습니다.');
+        }
+    }
+
+    window.onload = async function () {
+        const selectedItems = JSON.parse(localStorage.getItem("selectedItems"));
+        const params = new URLSearchParams(window.location.search);
+        const totalAmount = params.get("totalAmount");
+
+        // 기본 배송지 로드
+        try {
+            const response = await fetch("/address/default", {
+                method: "GET",
+                headers: {"Content-Type": "application/json"},
+            });
+
+            if (response.ok) {
+                const defaultAddress = await response.json();
+                if (defaultAddress) {
+                    document.getElementById("recipientName").value = defaultAddress.recipientName;
+                    document.getElementById("phoneNumber").value = defaultAddress.phoneNumber;
+                    document.getElementById("postalCode").value = defaultAddress.postalCode;
+                    document.getElementById("addressLine1").value = defaultAddress.addressLine1;
+                    document.getElementById("addressLine2").value = defaultAddress.addressLine2;
+                    document.getElementById("isDefault").checked = true;
+                }
+            }
+        } catch (error) {
+            console.error("Failed to fetch default address:", error);
+        }
+
+        // 상품 목록 및 총 금액 표시
+        if (totalAmount) {
+            document.getElementById("totalAmount").textContent = `${parseInt(totalAmount).toLocaleString()}원`;
+        }
+        if (selectedItems) {
+            const tbody = document.getElementById("selected-items-tbody");
+            selectedItems.forEach(item => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+            <td>${item.productName}</td>
+            <td>${item.quantity}</td>
+            <td>${(item.price * item.quantity).toLocaleString()}원</td>
+        `;
+                tbody.appendChild(row);
+            });
+        }
+    };
+
+    function togglePaymentOptions(method) {
+        const cardOptions = document.getElementById('card-options');
+        const bankInfo = document.getElementById('bank-info');
+
+        if (method === 'card') {
+            cardOptions.style.display = 'block'; // 신용카드 선택 시 옵션 표시
+            bankInfo.style.display = 'none'; // 은행 정보 숨김
+        } else if (method === 'bank') {
+            cardOptions.style.display = 'none'; // 신용카드 옵션 숨김
+            bankInfo.style.display = 'block'; // 은행 정보 표시
+        }
+    }
+
+    function toggleCustomRequest(value) {
+        const customInput = document.getElementById('customDeliveryRequest');
+        if (value === 'custom') {
+            customInput.style.display = 'block'; // 사용자 정의 입력 필드 표시
+            customInput.required = true; // 입력 필수 설정
+        } else {
+            customInput.style.display = 'none'; // 사용자 정의 입력 필드 숨기기
+            customInput.required = false; // 입력 필수 해제
+            customInput.value = ''; // 값 초기화
+        }
+    }
+
+</script>
+
+</body>
+</html>
