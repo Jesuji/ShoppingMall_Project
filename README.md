@@ -2,14 +2,14 @@
 
 ## 📎 프로젝트 개요
 이 프로젝트는 전공 시간 과제로 진행한 사용자가 상품을 검색하고, 장바구니에 담고, 주문할 수 있는 **간단한  온라인 쇼핑몰** 웹 애플리케이션 입니다. 
+<br>
 
 ## ⚒️ 개발 환경
 **IDE**: IntelliJ IDEA Community
 **JDK**: OpenJDK 17
 **Database**: mysql 9.0.1
 **Frontend**: Thymeleaf, HTML, CSS, JavaScript
-
-
+<br>
 
 ## ⚒️ 기술 스택
 ### 📌 Backend (백엔드)
@@ -35,7 +35,6 @@
 ## 쇼핑몰 전체 구성도
 <img width="822" alt="스크린샷 2025-03-12 오후 1 41 37" src="https://github.com/user-attachments/assets/7713c061-b5ca-4464-bb5e-618e60a111f2" />
 
----
 <br>
 
 ## ⚒️ 주요 기능 
