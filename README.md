@@ -50,7 +50,7 @@
 
 
 ### ✅ 메인 화면에 동적 배너 생성
-<img width="600" alt="Image" src="https://github.com/user-attachments/assets/cac6be2d-2601-4663-af2c-f9e339a7d3e3" />
+<img width="700" alt="Image" src="https://github.com/user-attachments/assets/cac6be2d-2601-4663-af2c-f9e339a7d3e3" />
 
 <br>
 
@@ -71,11 +71,11 @@
 
 ### ✅ 장바구니 담기 및 위시 리스트 담기
 <img width="700" alt="Image" src="https://github.com/user-attachments/assets/fe8e798c-4383-42ec-871d-bbd2a6fbaba7" />
-<img width="459" alt="스크린샷 2025-03-12 오전 1 46 53" src="https://github.com/user-attachments/assets/b1d91cbc-cf86-414d-ba65-c8775c9bf4ab" />
+<img width="500" alt="스크린샷 2025-03-12 오전 1 46 53" src="https://github.com/user-attachments/assets/b1d91cbc-cf86-414d-ba65-c8775c9bf4ab" />
 
 <br>
 
 
 ### ✅ 주문하기 
-<img width="751" alt="Image" src="https://github.com/user-attachments/assets/c43f12c9-ed69-4e62-b6c0-6a250fcfb18a" />
-<img width="614" alt="스크린샷 2025-03-12 오후 3 30 06" src="https://github.com/user-attachments/assets/b2e3b144-d77c-4a12-ad1a-113c91324a18" />
+<img width="700" alt="Image" src="https://github.com/user-attachments/assets/c43f12c9-ed69-4e62-b6c0-6a250fcfb18a" />
+<img width="700" alt="스크린샷 2025-03-12 오후 3 30 06" src="https://github.com/user-attachments/assets/b2e3b144-d77c-4a12-ad1a-113c91324a18" />
