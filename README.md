@@ -31,7 +31,7 @@
 <br>
 
 ## ERD
-<img width="700" alt="스크린샷 2025-03-12 오후 1 41 12" src="https://github.com/user-attachments/assets/a0669827-0229-4ae6-8d8c-758d638053d4" />
+<img width="800" alt="스크린샷 2025-03-12 오후 1 41 12" src="https://github.com/user-attachments/assets/a0669827-0229-4ae6-8d8c-758d638053d4" />
 
 <br>
 
@@ -44,16 +44,15 @@
 
 ## ⚒️ 주요 기능 
 ### ✅ 회원가입 및 로그인 (세션 인증 기반)
-<img width="445" alt="Image" src="https://github.com/user-attachments/assets/094381c2-5e37-4416-8a7a-73543dfeb163" />
-
+<img width="450" alt="스크린샷 2025-03-12 오후 3 35 47" src="https://github.com/user-attachments/assets/8489f127-a26b-4244-ba07-025281a4c573" /> <img width="450" alt="Image" src="https://github.com/user-attachments/assets/094381c2-5e37-4416-8a7a-73543dfeb163" />
 
 ### ✅ 메인 화면에 동적 배너 생성
-<img width="673" alt="Image" src="https://github.com/user-attachments/assets/cac6be2d-2601-4663-af2c-f9e339a7d3e3" />
+<img width="600" alt="Image" src="https://github.com/user-attachments/assets/cac6be2d-2601-4663-af2c-f9e339a7d3e3" />
 
 
 ### ✅ 상품 목록 조회 및 검색 기능
-<img width="600" alt="Image" src="https://github.com/user-attachments/assets/b0309e5e-7415-46c4-b3d8-9205f8dc53d6" />
-<img width="600" alt="Image" src="https://github.com/user-attachments/assets/3d6a7df1-c161-47db-b68f-4091e977a10d" />
+<img width="700" alt="Image" src="https://github.com/user-attachments/assets/b0309e5e-7415-46c4-b3d8-9205f8dc53d6" />
+<img width="700" alt="Image" src="https://github.com/user-attachments/assets/3d6a7df1-c161-47db-b68f-4091e977a10d" />
 
 
 ### ✅ 리뷰 CRUD
