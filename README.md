@@ -28,7 +28,7 @@
 ## ERD
 <img width="753" alt="스크린샷 2025-03-12 오후 1 41 12" src="https://github.com/user-attachments/assets/a0669827-0229-4ae6-8d8c-758d638053d4" />
 
-## 시스템 아키텍처 다이어그램 
+## 쇼핑몰 전체 구성도
 <img width="822" alt="스크린샷 2025-03-12 오후 1 41 37" src="https://github.com/user-attachments/assets/7713c061-b5ca-4464-bb5e-618e60a111f2" />
 
 ## ⚒️ 주요 기능 
