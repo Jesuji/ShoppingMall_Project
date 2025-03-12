@@ -40,7 +40,7 @@
 <img width="822" alt="스크린샷 2025-03-12 오후 1 41 37" src="https://github.com/user-attachments/assets/7713c061-b5ca-4464-bb5e-618e60a111f2" />
 
 <br>
-
+<br>
 
 ## ⚒️ 주요 기능 
 ### ✅ 회원가입 및 로그인 (세션 인증 기반)
