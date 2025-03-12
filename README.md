@@ -32,7 +32,7 @@
 <img width="822" alt="스크린샷 2025-03-12 오후 1 41 37" src="https://github.com/user-attachments/assets/7713c061-b5ca-4464-bb5e-618e60a111f2" />
 
 ## ⚒️ 주요 기능 
-###✅ 회원가입 및 로그인 (세션 인증 기반)
+### ✅ 회원가입 및 로그인 (세션 인증 기반)
 <img width="445" alt="Image" src="https://github.com/user-attachments/assets/094381c2-5e37-4416-8a7a-73543dfeb163" />
 
 ### ✅ 메인 화면에 동적 배너 생성
