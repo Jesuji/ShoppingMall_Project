@@ -46,24 +46,30 @@
 ### ✅ 회원가입 및 로그인 (세션 인증 기반)
 <img width="400" alt="스크린샷 2025-03-12 오후 3 35 47" src="https://github.com/user-attachments/assets/8489f127-a26b-4244-ba07-025281a4c573" /> <img width="400" alt="Image" src="https://github.com/user-attachments/assets/094381c2-5e37-4416-8a7a-73543dfeb163" />
 
+<br>
+
 ### ✅ 메인 화면에 동적 배너 생성
 <img width="600" alt="Image" src="https://github.com/user-attachments/assets/cac6be2d-2601-4663-af2c-f9e339a7d3e3" />
 
+<br>
 
 ### ✅ 상품 목록 조회 및 검색 기능
 <img width="700" alt="Image" src="https://github.com/user-attachments/assets/b0309e5e-7415-46c4-b3d8-9205f8dc53d6" />
 <img width="700" alt="Image" src="https://github.com/user-attachments/assets/3d6a7df1-c161-47db-b68f-4091e977a10d" />
 
+<br>
 
 ### ✅ 리뷰 CRUD
 <img width="845" alt="Image" src="https://github.com/user-attachments/assets/fcec6252-e7f2-440b-afc9-dd51feae3e40" />
 <img width="773" alt="스크린샷 2025-03-12 오전 1 49 24" src="https://github.com/user-attachments/assets/7b79a4f8-4f7c-4bbd-babe-c8b241225b69" />
 
+<br>
 
 ### ✅ 장바구니 담기 및 위시 리스트 담기
 <img width="857" alt="Image" src="https://github.com/user-attachments/assets/fe8e798c-4383-42ec-871d-bbd2a6fbaba7" />
 <img width="459" alt="스크린샷 2025-03-12 오전 1 46 53" src="https://github.com/user-attachments/assets/b1d91cbc-cf86-414d-ba65-c8775c9bf4ab" />
 
+<br>
 
 ### ✅ 주문하기 
 <img width="751" alt="Image" src="https://github.com/user-attachments/assets/c43f12c9-ed69-4e62-b6c0-6a250fcfb18a" />
