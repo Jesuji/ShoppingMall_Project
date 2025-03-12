@@ -8,7 +8,7 @@
 **JDK**: OpenJDK 17
 **Database**: mysql 9.0.1
 **Frontend**: Thymeleaf, HTML, CSS, JavaScript
-
+<br>
 
 ## ⚒️ 기술 스택
 ### 📌 Backend (백엔드)
@@ -30,6 +30,7 @@
 
 ## 쇼핑몰 전체 구성도
 <img width="822" alt="스크린샷 2025-03-12 오후 1 41 37" src="https://github.com/user-attachments/assets/7713c061-b5ca-4464-bb5e-618e60a111f2" />
+<br>
 
 ## ⚒️ 주요 기능 
 ### ✅ 회원가입 및 로그인 (세션 인증 기반)
