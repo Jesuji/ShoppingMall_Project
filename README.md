@@ -12,13 +12,13 @@
 
 ## ⚒️ 기술 스택
 ### 📌 Backend (백엔드)
-- **Java 17** –
+- **Java 17** 
 - **Spring Boot 3.3.5**
 - **JPA (Hibernate)**
 - **Lombok**  
 
 ### 📌 Frontend (프론트엔드)
-- **Thymeleaf** –  
+- **Thymeleaf** 
 - **HTML / CSS / JavaScript**
 
 ### 📌 Database (데이터베이스)
