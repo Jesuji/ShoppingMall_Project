@@ -34,6 +34,7 @@
 
 ## 쇼핑몰 전체 구성도
 <img width="822" alt="스크린샷 2025-03-12 오후 1 41 37" src="https://github.com/user-attachments/assets/7713c061-b5ca-4464-bb5e-618e60a111f2" />
+
 ---
 
 
