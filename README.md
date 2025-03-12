@@ -44,7 +44,7 @@
 
 ## ⚒️ 주요 기능 
 ### ✅ 회원가입 및 로그인 (세션 인증 기반)
-<img width="450" alt="스크린샷 2025-03-12 오후 3 35 47" src="https://github.com/user-attachments/assets/8489f127-a26b-4244-ba07-025281a4c573" /> <img width="450" alt="Image" src="https://github.com/user-attachments/assets/094381c2-5e37-4416-8a7a-73543dfeb163" />
+<img width="400" alt="스크린샷 2025-03-12 오후 3 35 47" src="https://github.com/user-attachments/assets/8489f127-a26b-4244-ba07-025281a4c573" /> <img width="400" alt="Image" src="https://github.com/user-attachments/assets/094381c2-5e37-4416-8a7a-73543dfeb163" />
 
 ### ✅ 메인 화면에 동적 배너 생성
 <img width="600" alt="Image" src="https://github.com/user-attachments/assets/cac6be2d-2601-4663-af2c-f9e339a7d3e3" />
