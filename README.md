@@ -1,6 +1,6 @@
 # 🛒 쇼핑몰 프로젝트
 
-## 📌 프로젝트 개요
+## 📎 프로젝트 개요
 이 프로젝트는 전공 시간 과제로 진행한 사용자가 상품을 검색하고, 장바구니에 담고, 주문할 수 있는 **간단한  온라인 쇼핑몰** 웹 애플리케이션 입니다. 
 
 ## ⚒️ 개발 환경
@@ -11,17 +11,17 @@
 
 
 ## ⚒️ 기술 스택
-### 🔹 Backend (백엔드)
+### 📌 Backend (백엔드)
 - **Java 17** –
 - **Spring Boot 3.3.5**
 - **JPA (Hibernate)**
 - **Lombok**  
 
-### 🔹 Frontend (프론트엔드)
+### 📌 Frontend (프론트엔드)
 - **Thymeleaf** –  
 - **HTML / CSS / JavaScript**
 
-### 🔹 Database (데이터베이스)
+### 📌 Database (데이터베이스)
 - **MySQL 9.0.1** 
 - **H2 Database** 
 
@@ -46,7 +46,7 @@
 <img width="845" alt="Image" src="https://github.com/user-attachments/assets/fcec6252-e7f2-440b-afc9-dd51feae3e40" />
 <img width="773" alt="스크린샷 2025-03-12 오전 1 49 24" src="https://github.com/user-attachments/assets/7b79a4f8-4f7c-4bbd-babe-c8b241225b69" />
 
-### ✅ 장바구니 담기 및 찜하기 
+### ✅ 장바구니 담기 및 위시 리스트 담기
 <img width="857" alt="Image" src="https://github.com/user-attachments/assets/fe8e798c-4383-42ec-871d-bbd2a6fbaba7" />
 <img width="459" alt="스크린샷 2025-03-12 오전 1 46 53" src="https://github.com/user-attachments/assets/b1d91cbc-cf86-414d-ba65-c8775c9bf4ab" />
 
