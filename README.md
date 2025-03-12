@@ -31,13 +31,13 @@
 <br>
 
 ## ERD
-<img width="753" alt="스크린샷 2025-03-12 오후 1 41 12" src="https://github.com/user-attachments/assets/a0669827-0229-4ae6-8d8c-758d638053d4" />
+<img width="700" alt="스크린샷 2025-03-12 오후 1 41 12" src="https://github.com/user-attachments/assets/a0669827-0229-4ae6-8d8c-758d638053d4" />
 
 <br>
 
 
 ## 쇼핑몰 전체 구성도
-<img width="822" alt="스크린샷 2025-03-12 오후 1 41 37" src="https://github.com/user-attachments/assets/7713c061-b5ca-4464-bb5e-618e60a111f2" />
+<img width="800" alt="스크린샷 2025-03-12 오후 1 41 37" src="https://github.com/user-attachments/assets/7713c061-b5ca-4464-bb5e-618e60a111f2" />
 
 <br>
 <br>
@@ -52,8 +52,8 @@
 
 
 ### ✅ 상품 목록 조회 및 검색 기능
-<img width="858" alt="Image" src="https://github.com/user-attachments/assets/b0309e5e-7415-46c4-b3d8-9205f8dc53d6" />
-<img width="758" alt="Image" src="https://github.com/user-attachments/assets/3d6a7df1-c161-47db-b68f-4091e977a10d" />
+<img width="600" alt="Image" src="https://github.com/user-attachments/assets/b0309e5e-7415-46c4-b3d8-9205f8dc53d6" />
+<img width="600" alt="Image" src="https://github.com/user-attachments/assets/3d6a7df1-c161-47db-b68f-4091e977a10d" />
 
 
 ### ✅ 리뷰 CRUD
