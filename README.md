@@ -68,3 +68,4 @@
 
 ### ✅ 주문하기 
 <img width="751" alt="Image" src="https://github.com/user-attachments/assets/c43f12c9-ed69-4e62-b6c0-6a250fcfb18a" />
+<img width="614" alt="스크린샷 2025-03-12 오후 3 30 06" src="https://github.com/user-attachments/assets/b2e3b144-d77c-4a12-ad1a-113c91324a18" />
