@@ -25,8 +25,7 @@
 - **HTML / CSS / JavaScript**
 
 ### 📌 Database (데이터베이스)
-- **MySQL 9.0.1** 
-- **H2 Database**
+- **H2 Database** -> 로컬 환경에서 빠르게 실행되나 일회용 메모리
 
 <br>
 
