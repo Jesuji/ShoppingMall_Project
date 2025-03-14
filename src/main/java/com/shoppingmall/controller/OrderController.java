@@ -4,7 +4,6 @@ import com.shoppingmall.dto.order.OrderRequestDTO;
 import com.shoppingmall.entity.Member;
 import com.shoppingmall.service.OrderService;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,11 +31,9 @@ public class OrderController {
                 Long orderId = orderService.createOrder(member.getId(), Dto, session); // 생성된 주문 ID 반환
                 return ResponseEntity.ok(orderId); // 주문 ID를 응답으로 반환
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(-1L);
             }
             catch (Exception e) {
-                e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
         }

@@ -60,9 +60,10 @@ public class CommentController {
 
     // 댓글 수정
     @PatchMapping("/products/update/comments/{commentId}")
-    public ResponseEntity<String> updateComment(@PathVariable Long commentId, @RequestBody CommentUpdateRequest request) {
+    public ResponseEntity<String> updateComment(@PathVariable Long commentId, @RequestBody CommentUpdateRequest request, HttpSession session) {
+        Member member = (Member) session.getAttribute("member");
         try {
-            commentService.updateComment(commentId, request.content());
+            commentService.updateComment(commentId, request.content(), member);
             return ResponseEntity.ok("댓글이 수정되었습니다.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -71,9 +72,10 @@ public class CommentController {
 
     // 댓글 삭제
     @DeleteMapping("/products/delete/comments/{commentId}")
-    public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
+    public ResponseEntity<String> deleteComment(@PathVariable Long commentId, HttpSession session) {
+        Member member = (Member) session.getAttribute("member");
         try {
-            commentService.deleteComment(commentId);
+            commentService.deleteComment(commentId, member);
             return ResponseEntity.ok("댓글이 삭제되었습니다.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

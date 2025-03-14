@@ -95,18 +95,27 @@ public class CommentService {
     }
 
     // 댓글 수정
-    public void updateComment(Long commentId, String newContent) {
+    public void updateComment(Long commentId, String newContent, Member member) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
 
+        if(!comment.getMember().getId().equals(member.getId())) {
+            throw new IllegalArgumentException("본인만 댓글을 수정할 수 있습니다.");
+
+        }
         comment.setContent(newContent);
         commentRepository.save(comment);
     }
 
     // 부모 댓글을 삭제하면, 대댓글도 같이 삭제되도록 Cascade 설정
-    public void deleteComment(Long commentId) {
+    public void deleteComment(Long commentId, Member member) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
+
+        if(!comment.getMember().getId().equals(member.getId())) {
+            throw new IllegalArgumentException("본인만 댓글을 삭제할 수 있습니다.");
+        }
+
         commentRepository.delete(comment);
     }
 }
