@@ -99,7 +99,7 @@ https://spark-plot-2cc.notion.site/API-134a56a2c7a1809fb020c02fddc198f7?pvs=4
 
 
 ### 📌 고찰
-1️⃣ 엔티티 간의 양방향 관계에서 무한 루프 및 StackOverflow 오류가 있어 @ToString(exclude="cart") >> 이런 형식으로 해결했다
+1️⃣ 엔티티 간의 양방향 관계에서 무한 루프 및 StackOverflow 오류가 있어 @ToString(exclude="cart") >> 이런 형식으로 해결했다.
 
 
 2️⃣ 대댓글 구조를 구현하면서 대댓글이 부모 댓글과 연결되지 않은 상태로 DB에 저장되서 오류가 생겼습니다. DB 설계에서 부모 댓글 ID를 명확히 설정하고, 댓글 작성 시 해당 부모 댓글 ID를 함께 저장하도록 하여 오류를 해결했다.
