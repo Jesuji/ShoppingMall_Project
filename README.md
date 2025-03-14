@@ -69,7 +69,7 @@
 <br>
 
 ### ✅ 댓글 및 대댓글 달기
-<img width="1470" alt="스크린샷 2025-03-12 오전 12 28 40" src="https://github.com/user-attachments/assets/1b513a56-67c3-42b5-b311-0f7b26b55d10" />
+<img width="661" alt="스크린샷 2025-03-14 오후 3 05 11" src="https://github.com/user-attachments/assets/136ef2c7-fbbd-4776-8fd8-dc4a40952d8f" />
 
 <br>
 
