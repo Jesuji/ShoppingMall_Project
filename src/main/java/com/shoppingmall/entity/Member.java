@@ -1,5 +1,6 @@
 package com.shoppingmall.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +13,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
+@ToString(exclude = {"cart", "addresses", "orders", "Coupons", "reviews", "wishlist"})
 public class Member {
 
     @Id
@@ -25,16 +26,19 @@ public class Member {
     private String password;
     private int points = 0;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    /*@JsonIgnore // JSON 직렬화 시 addresses 제외*/
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Address> addresses = new ArrayList<>();
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Cart cart;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Wishlist wishlist;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    /*@JsonIgnore */
     private List<Order> orders = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)

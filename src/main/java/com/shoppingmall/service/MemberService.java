@@ -21,11 +21,11 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public String joinMember(JoinRequest request) {
-        String joinname = request.getName();
-        String joinemmail = request.getEmail();
-        String joinpassword = request.getPassword();
+        String joinName = request.getName();
+        String joinEmail = request.getEmail();
+        String joinPassword = request.getPassword();
 
-        Member newMember = new Member(joinname, joinemmail, joinpassword);
+        Member newMember = new Member(joinName, joinEmail, joinPassword);
         Coupon coupon = getCoupon();
         newMember.addCoupon(coupon);
 

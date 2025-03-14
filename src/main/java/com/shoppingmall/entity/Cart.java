@@ -1,5 +1,6 @@
 package com.shoppingmall.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,9 +10,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"member", "cartItems"})
 public class Cart {
 
     @Id
@@ -26,6 +27,7 @@ public class Cart {
 
     @OneToOne
     @JoinColumn(name = "member_id")
+    @JsonIgnore
     private Member member;
 
     public Cart(Member member) {
