@@ -29,6 +29,11 @@
 
 <br>
 
+### 📕 API 명세서 
+https://spark-plot-2cc.notion.site/API-134a56a2c7a1809fb020c02fddc198f7?pvs=4
+
+<br>
+
 ## ERD
 <img width="800" alt="스크린샷 2025-03-12 오후 1 41 12" src="https://github.com/user-attachments/assets/a0669827-0229-4ae6-8d8c-758d638053d4" />
 
@@ -97,5 +102,7 @@
 3️⃣ 뷰 템플릿과 데이터를 Model 매핑하여 HTML 페이지를 반환할 때 뷰가 뜨지 않는 에러가 자주 생겼었는데 뷰 템플릿에서 그 데이터를 올바르게 참조하지 않아서 생긴 오류였다. 
 
 ### 📌 향후 업데이트 계획 
+- 리뷰 작성할 때 이미지 추가 기능
 - OAuth 로그인 추가 (카카오 로그인 연동)
-- 예외 처리에 대해 Custom Exception 만들기 
+- 예외 처리에 대해 Custom Exception 만들기
+
