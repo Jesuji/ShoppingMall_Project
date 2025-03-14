@@ -7,7 +7,7 @@
 
 ## ⚒️ 개발 환경
 - **IDE**: IntelliJ IDEA Community
-- **JDK**: OpenJDK 17
+- **JDK**: OpenJDK 17 
 - **Database**: mysql 9.0.1
 - **Frontend**: Thymeleaf, HTML, CSS, JavaScript
 
