@@ -68,6 +68,10 @@
 
 <br>
 
+### ✅ 댓글 및 대댓글 달기
+<img width="1470" alt="스크린샷 2025-03-12 오전 12 28 40" src="https://github.com/user-attachments/assets/1b513a56-67c3-42b5-b311-0f7b26b55d10" />
+
+<br>
 
 ### ✅ 장바구니 담기 및 위시 리스트 담기
 <img width="700" alt="Image" src="https://github.com/user-attachments/assets/fe8e798c-4383-42ec-871d-bbd2a6fbaba7" />
