@@ -13,14 +13,6 @@
 
 <br>
 
-### 📌 Frontend (프론트엔드)
-- **Thymeleaf** 
-- **HTML / CSS / JavaScript**
-
-### 📌 Database (데이터베이스)
-- **H2 Database** -> 로컬 환경에서 빠르게 실행되나 일회용 메모리
-
-<br>
 
 
 ## ⚒️ 주요 기능 
