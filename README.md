@@ -13,13 +13,6 @@
 
 <br>
 
-## ⚒️ 기술 스택
-### 📌 Backend (백엔드)
-- **Java 17** 
-- **Spring Boot 3.3.5**
-- **JPA (Hibernate)**
-- **Lombok**  
-
 ### 📌 Frontend (프론트엔드)
 - **Thymeleaf** 
 - **HTML / CSS / JavaScript**
@@ -29,22 +22,6 @@
 
 <br>
 
-### 📕 API 명세서 
-https://spark-plot-2cc.notion.site/API-134a56a2c7a1809fb020c02fddc198f7?pvs=4
-
-<br>
-
-## ERD
-<img width="800" alt="스크린샷 2025-03-12 오후 1 41 12" src="https://github.com/user-attachments/assets/a0669827-0229-4ae6-8d8c-758d638053d4" />
-
-<br>
-
-
-## 쇼핑몰 전체 구성도
-<img width="800" alt="스크린샷 2025-03-12 오후 1 41 37" src="https://github.com/user-attachments/assets/7713c061-b5ca-4464-bb5e-618e60a111f2" />
-
-<br>
-<br>
 
 ## ⚒️ 주요 기능 
 ### ✅ 회원가입 및 로그인 (세션 인증 기반)
@@ -95,6 +72,21 @@ https://spark-plot-2cc.notion.site/API-134a56a2c7a1809fb020c02fddc198f7?pvs=4
 
 
 <br> 
+
+### 📕 API 명세서 
+https://spark-plot-2cc.notion.site/API-134a56a2c7a1809fb020c02fddc198f7?pvs=4
+
+<br>
+
+## ERD
+<img width="800" alt="스크린샷 2025-03-12 오후 1 41 12" src="https://github.com/user-attachments/assets/a0669827-0229-4ae6-8d8c-758d638053d4" />
+
+<br>
+
+
+## 쇼핑몰 전체 구성도
+<img width="800" alt="스크린샷 2025-03-12 오후 1 41 37" src="https://github.com/user-attachments/assets/7713c061-b5ca-4464-bb5e-618e60a111f2" />
+
 <br>
 
 
@@ -106,6 +98,33 @@ https://spark-plot-2cc.notion.site/API-134a56a2c7a1809fb020c02fddc198f7?pvs=4
 
 
 3️⃣ 뷰 템플릿과 데이터를 Model 매핑하여 HTML 페이지를 반환할 때 뷰가 뜨지 않는 에러가 자주 생겼었는데 뷰 템플릿에서 그 데이터를 올바르게 참조하지 않아서 생긴 오류였다. 
+
+<br>
+
+
+## ⚒️ 기술 스택
+### 📌 Backend (백엔드)
+- **Java 17** 
+- **Spring Boot 3.3.5**
+- **JPA (Hibernate)**
+- **Lombok**
+
+<br>
+
+
+## 🚀 로컬에서 실행하는 방법 
+1️⃣ 프로젝트 클론 
+```bash
+git clone https://github.com/Jesuji/ShoppingMall_Project.git 
+cd ShoppingMall_Project
+```
+
+
+2️⃣ 실행
+```bash
+http://localhost:8080
+```
+
 
 <br>
 
